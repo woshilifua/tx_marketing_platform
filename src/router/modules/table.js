@@ -3,7 +3,7 @@
 import Layout from '@/layout'
 
 const tableRouter = {
-  path: '/table',
+  path: '/',
   component: Layout,
   redirect: '/table/complex-table',
   name: 'Table',
