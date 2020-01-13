@@ -1,188 +1,28 @@
 <template>
   <div class="register-container">
-    <el-form
-      ref="registerForm"
-      :model="registerForm"
-      :rules="registerRules"
-      class="register-form"
-      autocomplete="on"
-      label-position="left"
-    >
-      <div class="title-container">
-        <h3 class="title">营销系统注册</h3>
-      </div>
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-select v-model="registerForm.role" placeholder="选择角色">
-          <el-option key="admin" label="管理员" value="admin"> </el-option>
-          <el-option key="sale" label="运营商" value="sale"> </el-option>
-          <el-option key="channel" label="渠道商" value="channel"> </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="registerForm.username"
-          placeholder="用户名"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-tooltip
-        v-model="capsTooltip"
-        content="Caps lock is On"
-        placement="right"
-        manual
-      >
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="registerForm.password"
-            :type="passwordType"
-            placeholder="密码"
-            name="password"
-            tabindex="2"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleregister"
-          />
-        </el-form-item>
-      </el-tooltip>
-
-      <el-form-item prop="passwordRepeat">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="passwordRepeat"
-          v-model="registerForm.passwordRepeat"
-          :type="passwordType"
-          placeholder="重复密码"
-          name="passwordRepeat"
-          tabindex="3"
-          @keyup.native="checkCapslock"
-          @blur="capsTooltip = false"
-          @keyup.enter.native="handleregister"
-        />
-      </el-form-item>
-
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width:100%;margin-bottom:30px;"
-        @click.native.prevent="handleregister"
-      >
-        注册
-      </el-button>
-    </el-form>
+    <component :is="currentRole" v-on:change-role="changeRole" />
   </div>
 </template>
 
 <script>
+import admin from './components/Admin'
+import sale from './components/Sale'
+import channel from './components/Channel'
+
 export default {
-  name: 'register',
-  data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请输入用户名'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('请输入不少于 6 位数的密码'))
-      } else {
-        callback()
-      }
-    }
-    const validatePasswordRepeat = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请输入不少于 6 位数的密码'))
-      } else if (value !== this.registerForm.password) {
-        callback(new Error('密码不一致'))
-      } else {
-        callback()
-      }
-    }
-    return {
-      registerForm: {
-        username: '',
-        password: '',
-        passwordRepeat: '',
-        role: ''
-      },
-      registerRules: {
-        username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
-        ],
-        password: [
-          { required: true, trigger: 'blur', validator: validatePassword }
-        ],
-        passwordRepeat: [
-          { required: true, trigger: 'blur', validator: validatePasswordRepeat }
-        ]
-      },
-      passwordType: 'password',
-      capsTooltip: false,
-      loading: false,
-      redirect: undefined,
-      otherQuery: {}
-    }
+  components: {
+    admin,
+    sale,
+    channel
   },
-  watch: {
-    $route: {
-      handler: function(route) {
-        const query = route.query
-        if (query) {
-          this.redirect = query.redirect
-        }
-      },
-      immediate: true
+  data() {
+    return {
+      currentRole: 'admin'
     }
   },
   methods: {
-    checkCapslock(e) {
-      const { key } = e
-      this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'
-    },
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
-    },
-    handleregister() {
-      this.$refs.registerForm.validate(valid => {
-        if (valid) {
-          this.$message({
-            message: '注册成功',
-            type: 'success',
-            showClose: true,
-            duration: 1000
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+    changeRole(role) {
+      this.currentRole = role
     }
   }
 }
@@ -242,7 +82,7 @@ $cursor: #fff;
 }
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
 $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
