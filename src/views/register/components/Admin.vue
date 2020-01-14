@@ -1,104 +1,61 @@
 <template>
-  <el-form
-    ref="registerForm"
-    :model="registerForm"
-    :rules="registerRules"
-    class="register-form"
-    autocomplete="on"
-    label-position="left"
-  >
-    <div class="title-container">
-      <h3 class="title">管理员注册</h3>
-    </div>
-    <el-form-item prop="username">
-      <span class="svg-container">
-        <svg-icon icon-class="user" />
-      </span>
-      <el-select v-model="registerForm.role" placeholder="选择角色">
-        <el-option key="admin" label="管理员" value="admin"> </el-option>
-        <el-option key="sale" label="运营" value="sale"> </el-option>
-        <el-option key="channel" label="渠道" value="channel"> </el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item prop="username">
-      <span class="svg-container">
-        <svg-icon icon-class="user" />
-      </span>
-      <el-input
-        ref="username"
-        v-model="registerForm.username"
-        placeholder="用户名"
-        name="username"
-        type="text"
-        tabindex="1"
-        autocomplete="on"
-      />
-    </el-form-item>
-
-    <el-tooltip
-      v-model="capsTooltip"
-      content="Caps lock is On"
-      placement="right"
-      manual
+  <div>
+    <el-form
+      ref="registerForm"
+      :model="registerForm"
+      :rules="registerRules"
+      class="register-form"
+      autocomplete="on"
+      label-position="left"
     >
-      <el-form-item prop="password">
+      <el-form-item prop="region">
         <span class="svg-container">
-          <svg-icon icon-class="password" />
+          <svg-icon icon-class="user" />
         </span>
         <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="registerForm.password"
-          :type="passwordType"
-          placeholder="密码"
-          name="password"
-          tabindex="2"
-          @keyup.native="checkCapslock"
-          @blur="capsTooltip = false"
-          @keyup.enter.native="handleregister"
+          ref="region"
+          v-model="registerForm.region"
+          placeholder="所属区域"
+          name="region"
+          type="text"
         />
       </el-form-item>
-    </el-tooltip>
-
-    <el-form-item prop="passwordRepeat">
-      <span class="svg-container">
-        <svg-icon icon-class="password" />
-      </span>
-      <el-input
-        :key="passwordType"
-        ref="passwordRepeat"
-        v-model="registerForm.passwordRepeat"
-        :type="passwordType"
-        placeholder="重复密码"
-        name="passwordRepeat"
-        tabindex="3"
-        @keyup.native="checkCapslock"
-        @blur="capsTooltip = false"
-        @keyup.enter.native="handleregister"
-      />
-    </el-form-item>
-
-    <el-button
-      :loading="loading"
-      type="primary"
-      style="width:100%;margin-bottom:30px;"
-      @click.native.prevent="handleregister"
-    >
-      注册
-    </el-button>
-  </el-form>
+      <commonForm ref="commonForm" />
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="validateForm"
+      >
+        注册
+      </el-button>
+    </el-form>
+  </div>
 </template>
 
 <script>
-import registerForm from './mixins/register'
+import commonForm from './components/Form'
+import register from './mixins/register'
 
-const adminForm = {
-  role: 'admin'
-}
 export default {
-  mixins: [registerForm],
-  created() {
-    Object.assign(this.registerForm, adminForm)
+  mixins: [register],
+  components: { commonForm },
+  data() {
+    const validateRegion = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入区域'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      registerForm: {
+        region: ''
+      },
+      registerRules: {
+        region: [{ required: true, trigger: 'blur', validator: validateRegion }]
+      }
+    }
   }
 }
 </script>

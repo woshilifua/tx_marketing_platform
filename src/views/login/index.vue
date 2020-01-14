@@ -121,18 +121,12 @@ export default {
       immediate: true
     }
   },
-  created() {
-    // window.addEventListener('storage', this.afterQRScan)
-  },
   mounted() {
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
     }
-  },
-  destroyed() {
-    // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
     checkCapslock(e) {

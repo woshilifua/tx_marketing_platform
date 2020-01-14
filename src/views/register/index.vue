@@ -1,10 +1,32 @@
 <template>
   <div class="register-container">
-    <component :is="currentRole" v-on:change-role="changeRole" />
+    <div class="form-option">
+      <div class="title-container">
+        <h3 class="title">营销系统注册</h3>
+      </div>
+      <div class="form-item">
+        <span class="svg-container">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-select v-model="currentRole" placeholder="选择角色">
+          <el-option key="admin" label="管理员" value="admin"> </el-option>
+          <el-option key="sale" label="销售" value="sale"> </el-option>
+          <el-option key="channel" label="渠道" value="channel"> </el-option>
+        </el-select>
+      </div>
+    </div>
+    <component :is="currentRole" />
   </div>
 </template>
 
 <script>
+/*
+  每个角色对应一个 Component, 
+  每个 Component 里面有一个 common form
+  用来验证一些共有的属性，如: username, password
+  每个 Component 里面只需要添加对应的特有的属性，和验证规则，最后在 mixins 里面进行统一的验证和提交
+*/
+
 import admin from './components/Admin'
 import sale from './components/Sale'
 import channel from './components/Channel'
@@ -73,11 +95,15 @@ $cursor: #fff;
       width: 100%;
     }
   }
-  .el-form-item {
+  .el-form-item,
+  .form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     color: #454545;
+  }
+  .form-item {
+    margin-bottom: 22px;
   }
 }
 </style>
@@ -93,11 +119,12 @@ $light_gray: #eee;
   background-color: $bg;
   overflow: hidden;
 
-  .register-form {
+  .register-form,
+  .form-option {
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 0 35px;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -124,7 +151,7 @@ $light_gray: #eee;
 
   .title-container {
     position: relative;
-
+    margin-top: 160px;
     .title {
       font-size: 26px;
       color: $light_gray;
