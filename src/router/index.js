@@ -132,12 +132,11 @@ export const asyncRoutes = [
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/example/edit'),
         name: 'EditArticle',
+        hidden: true,
         meta: {
           title: 'Edit Article', noCache: true, activeMenu: '/example/list',
-          roles: ['editor']
+          roles: ['admin', 'editor']
         },
-
-        hidden: true
       },
       {
         path: 'list',

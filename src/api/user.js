@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/user/login',
+    url: 'http://39.96.167.179:10011/mastermind/m/login',
     method: 'post',
     data
   })
