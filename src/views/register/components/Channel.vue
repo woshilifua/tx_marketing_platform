@@ -31,6 +31,7 @@ export default {
   data() {
     return {
       registerForm: {
+        userType: 'channel',
         region: ''
       },
       registerRules: {}

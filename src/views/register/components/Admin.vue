@@ -8,7 +8,7 @@
       autocomplete="on"
       label-position="left"
     >
-      <el-form-item prop="region">
+      <el-form-item prop="region" required>
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -41,19 +41,13 @@ export default {
   mixins: [register],
   components: { commonForm },
   data() {
-    const validateRegion = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请输入区域'))
-      } else {
-        callback()
-      }
-    }
     return {
       registerForm: {
+        userType: 'admin',
         region: ''
       },
       registerRules: {
-        region: [{ required: true, trigger: 'blur', validator: validateRegion }]
+        region: [{ required: true, trigger: 'blur' }]
       }
     }
   }

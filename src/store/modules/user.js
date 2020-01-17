@@ -1,11 +1,11 @@
-import { login, logout, getInfo } from '@/api/user'
+import { register, login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
   name: '',
-  avatar: '',
+  avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
   introduction: '',
   roles: []
 }
@@ -35,7 +35,21 @@ const actions = {
       login(form).then(response => {
         const { token } = response
         commit('SET_TOKEN', token)
+        // TODO need delete
+        // commit('SET_ROLES', ['admin', 'editor'])
         setToken(token)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  // user register
+  // eslint-disable-next-line
+  register({ commit }, form) {
+    return new Promise((resolve, reject) => {
+      register(form).then(() => {
         resolve()
       }).catch(error => {
         reject(error)

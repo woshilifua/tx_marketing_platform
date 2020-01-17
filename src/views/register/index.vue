@@ -10,7 +10,8 @@
         </span>
         <el-select v-model="currentRole" placeholder="选择角色">
           <el-option key="admin" label="管理员" value="admin"> </el-option>
-          <el-option key="sale" label="销售" value="sale"> </el-option>
+          <el-option key="marketing" label="营销" value="marketing">
+          </el-option>
           <el-option key="channel" label="渠道" value="channel"> </el-option>
         </el-select>
       </div>
@@ -28,13 +29,13 @@
 */
 
 import admin from './components/Admin'
-import sale from './components/Sale'
+import marketing from './components/Marketing'
 import channel from './components/Channel'
 
 export default {
   components: {
     admin,
-    sale,
+    marketing,
     channel
   },
   data() {
@@ -69,7 +70,7 @@ $cursor: #fff;
   .el-input {
     display: inline-block;
     height: 47px;
-    width: 85%;
+    width: calc(100% - 34px);
 
     input {
       background: transparent;

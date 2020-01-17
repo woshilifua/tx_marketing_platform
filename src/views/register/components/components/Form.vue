@@ -6,13 +6,13 @@
     class="commone-form"
     label-position="left"
   >
-    <el-form-item prop="username">
+    <el-form-item prop="userName">
       <span class="svg-container">
         <svg-icon icon-class="user" />
       </span>
       <el-input
         ref="username"
-        v-model="form.username"
+        v-model="form.userName"
         placeholder="用户名"
         name="username"
         type="text"
@@ -89,12 +89,12 @@ export default {
     }
     return {
       form: {
-        username: '',
-        password: '',
-        passwordRepeat: ''
+        userName: 'marketings',
+        password: '111111',
+        passwordRepeat: '111111'
       },
       rules: {
-        username: [
+        userName: [
           { required: true, trigger: 'blur', validator: validateUsername }
         ],
         password: [
