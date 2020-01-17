@@ -31,7 +31,7 @@
                     label="活动ID:"
                     class="postInfo-container-item"
                   >
-                    <el-input v-model="postForm.author"> </el-input>
+                    <el-input v-model="postForm.ID"> </el-input>
                   </el-form-item>
                 </el-col>
 
@@ -137,7 +137,7 @@
 <script>
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validURL } from '@/utils/validate'
-import { fetchArticle } from '@/api/article'
+import { fetchActivitiesDetails } from '@/api/activities'
 
 const defaultForm = {
   status: 'draft',
@@ -223,8 +223,8 @@ export default {
   },
   created() {
     if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id
-      this.fetchData(id)
+      const code = this.$route.params && this.$route.params.id
+      this.fetchData(code)
     }
 
     // Why need to make a copy of this.$route here?
@@ -234,7 +234,7 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchArticle(id)
+      fetchActivitiesDetails(id)
         .then(response => {
           this.postForm = response.data
 
@@ -243,25 +243,12 @@ export default {
           this.postForm.content_short += `Article Id:${this.postForm.id}`
 
           // set tagsview title
-          this.setTagsViewTitle()
 
           // set page title
-          this.setPageTitle()
         })
         .catch(err => {
           console.log(err)
         })
-    },
-    setTagsViewTitle() {
-      const title = 'Edit Article'
-      const route = Object.assign({}, this.tempRoute, {
-        title: `${title}-${this.postForm.id}`
-      })
-      this.$store.dispatch('tagsView/updateVisitedView', route)
-    },
-    setPageTitle() {
-      const title = 'Edit Article'
-      document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
       this.$refs.postForm.validate(valid => {

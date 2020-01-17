@@ -8,13 +8,14 @@ export function fetchList(query) {
   })
 }
 
-export function fetchArticle(id) {
+export function fetchActivitiesDetails() {
   return request({
-    url: '/article/detail',
+    url: 'http://39.96.167.179:10011/mastermind/m/act/channel',
     method: 'get',
-    params: { id }
+    params: { actCode: 'vJp6C4mf1' }
   })
 }
+
 
 export function fetchPv(pv) {
   return request({

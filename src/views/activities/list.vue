@@ -46,11 +46,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Actions" width="120">
+      <el-table-column align="center" label="活动明细" width="120">
         <template slot-scope="scope">
-          <router-link :to="'/example/edit/' + scope.row.id">
+          <router-link :to="'/activities/view/' + scope.row.actCode">
             <el-button type="primary" size="small" icon="el-icon-edit">
-              审核
+              查看
             </el-button>
           </router-link>
         </template>
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+import { fetchList } from '@/api/activities'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
