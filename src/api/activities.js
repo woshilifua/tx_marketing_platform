@@ -16,6 +16,13 @@ export function fetchActivitiesDetails() {
   })
 }
 
+export function fetchActivitiesChannels() {
+  return request({
+    url: 'http://39.96.167.179:10011/mastermind/m/act/detail',
+    method: 'get',
+    params: { channelCode: '1' }
+  })
+}
 
 export function fetchPv(pv) {
   return request({

@@ -149,6 +149,16 @@ export const asyncRoutes = [
         },
       },
       {
+        path: 'view/channel/:id',
+        component: () => import('@/views/activities/view-channel'),
+        name: 'ViewActivitiesChannel',
+        hidden: true,
+        meta: {
+          title: '参看渠道发展明细', noCache: true, activeMenu: '/example/list',
+          roles: ['admin', 'marketing']
+        },
+      },
+      {
         path: 'list',
         component: () => import('@/views/activities/list'),
         name: 'ArticleList',
