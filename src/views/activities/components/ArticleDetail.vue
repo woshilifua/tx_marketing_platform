@@ -13,10 +13,10 @@
           type="success"
           @click="submitForm"
         >
-          Publish
+          发布
         </el-button>
         <el-button v-loading="loading" type="warning" @click="draftForm">
-          Draft
+          草稿
         </el-button>
       </sticky>
 
@@ -25,56 +25,110 @@
           <el-col :span="24">
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="8">
+                <el-col :span="12">
                   <el-form-item
-                    label-width="60px"
-                    label="Author:"
+                    label-width="120px"
+                    label="活动ID:"
                     class="postInfo-container-item"
                   >
-                    <el-input
-                      v-model="postForm.author"
-                      placeholder="Search user"
-                    >
-                    </el-input>
+                    <el-input v-model="postForm.author"> </el-input>
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="10">
+                <el-col :span="12">
                   <el-form-item
                     label-width="120px"
-                    label="Publish Time:"
+                    label="营销活动目标:"
+                    class="postInfo-container-item"
+                  >
+                    <el-input v-model="postForm.actExpect"> </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item
+                    label-width="120px"
+                    label="活动名称:"
+                    class="postInfo-container-item"
+                  >
+                    <el-input v-model="postForm.actName"> </el-input>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                  <el-form-item
+                    label-width="120px"
+                    label="营销成本总额:"
+                    class="postInfo-container-item"
+                  >
+                    <el-input v-model="postForm.actCostCount"> </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item
+                    label-width="120px"
+                    label="活动分类:"
+                    class="postInfo-container-item"
+                  >
+                    <el-input v-model="postForm.actType"> </el-input>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                  <el-form-item
+                    label-width="120px"
+                    label="单用户营销成本:"
+                    class="postInfo-container-item"
+                  >
+                    <el-input v-model="postForm.actCostSingle"> </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item
+                    label-width="120px"
+                    label="活动范围:"
+                    class="postInfo-container-item"
+                  >
+                    <el-input v-model="postForm.scope"> </el-input>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                  <el-form-item
+                    label-width="120px"
+                    label="营销活动描述:"
+                    class="postInfo-container-item"
+                  >
+                    <el-input v-model="postForm.actDesc"> </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item
+                    label-width="120px"
+                    label="营销活动周期:"
                     class="postInfo-container-item"
                   >
                     <el-date-picker
-                      v-model="displayTime"
-                      type="datetime"
-                      format="yyyy-MM-dd HH:mm:ss"
-                      placeholder="Select date and time"
-                    />
+                      v-model="postForm.startTime"
+                      type="datetimerange"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                    >
+                    </el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
             </div>
           </el-col>
         </el-row>
-
-        <el-form-item
-          style="margin-bottom: 40px;"
-          label-width="70px"
-          label="Summary:"
-        >
-          <el-input
-            v-model="postForm.content_short"
-            :rows="1"
-            type="textarea"
-            class="article-textarea"
-            autosize
-            placeholder="Please enter the content"
-          />
-          <span v-show="contentShortLength" class="word-counter"
-            >{{ contentShortLength }}words</span
-          >
-        </el-form-item>
       </div>
     </el-form>
   </div>
@@ -87,11 +141,15 @@ import { fetchArticle } from '@/api/article'
 
 const defaultForm = {
   status: 'draft',
-  title: '', // 文章题目
-  content: '', // 文章内容
-  content_short: '', // 文章摘要
-  image_uri: '', // 文章图片
-  display_time: undefined, // 前台展示时间
+  actName: '',
+  actExpect: '',
+  actCostCount: '',
+  actType: '',
+  actCostSingle: '',
+  startTime: '',
+  endTime: '',
+  actDesc: '',
+  scope: '',
   id: undefined
 }
 

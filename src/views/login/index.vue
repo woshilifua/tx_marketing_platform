@@ -63,8 +63,9 @@
         style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleLogin"
       >
-        Login
+        登录
       </el-button>
+      <router-link class="register-link" to="/register">注册账号</router-link>
     </el-form>
   </div>
 </template>
@@ -157,10 +158,10 @@ export default {
           this.$store
             .dispatch('user/login', loginForm)
             .then(() => {
-              // this.$router.push({
-              //   path: this.redirect || '/',
-              //   query: this.otherQuery
-              // })
+              this.$router.push({
+                path: this.redirect || '/',
+                query: this.otherQuery
+              })
               this.loading = false
             })
             .catch(() => {
@@ -298,7 +299,10 @@ $light_gray: #eee;
     right: 0;
     bottom: 6px;
   }
-
+  .register-link {
+    font-size: 14px;
+    color: $light_gray;
+  }
   @media only screen and (max-width: 470px) {
     .thirdparty-button {
       display: none;

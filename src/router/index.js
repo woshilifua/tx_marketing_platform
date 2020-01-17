@@ -19,7 +19,7 @@ import Layout from '@/layout'
  * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
+    roles: ['admin]    control the page roles (you can set multiple roles)
     title: 'title'               the name show in sidebar and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar
     noCache: true                if set true, the page will no be cached(default is false)
@@ -109,42 +109,42 @@ export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
 
   {
-    path: '/example',
+    path: '/activities',
     component: Layout,
     redirect: '/example/list',
-    name: 'Example',
+    name: 'Activities',
     meta: {
-      title: 'Example',
+      title: '营销活动',
       icon: 'example',
-      roles: ['admin', 'editor']
+      roles: ['admin', 'marketing']
     },
     children: [
       {
         path: 'create',
-        component: () => import('@/views/example/create'),
+        component: () => import('@/views/activities/create'),
         name: 'CreateArticle',
         meta: {
-          title: 'Create Article', icon: 'edit',
-          roles: ['editor']
+          title: '创建活动', icon: 'edit',
+          roles: ['admin', 'marketing']
         }
       },
       {
         path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
+        component: () => import('@/views/activities/edit'),
         name: 'EditArticle',
         hidden: true,
         meta: {
-          title: 'Edit Article', noCache: true, activeMenu: '/example/list',
-          roles: ['admin', 'editor']
+          title: '编辑活动', noCache: true, activeMenu: '/example/list',
+          roles: ['admin', 'marketing']
         },
       },
       {
         path: 'list',
-        component: () => import('@/views/example/list'),
+        component: () => import('@/views/activities/list'),
         name: 'ArticleList',
         meta: {
-          title: 'Article List', icon: 'list',
-          roles: ['admin', 'editor']
+          title: '活动列表', icon: 'list',
+          roles: ['admin', 'marketing']
         }
       }
     ]

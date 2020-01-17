@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/article/list',
+    url: 'http://39.96.167.179:10011/mastermind/m/act/list',
     method: 'get',
     params: query
   })
