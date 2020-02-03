@@ -55,7 +55,7 @@
         <el-table-column align="center" label="渠道发展明细" width="120">
           <template slot-scope="scope">
             <router-link
-              :to="'/activities/view/channel/' + scope.row.channelCode"
+              :to="'/activity/view/channel/' + scope.row.channelCode"
             >
               <el-button type="primary" size="small" icon="el-icon-edit">
                 查看

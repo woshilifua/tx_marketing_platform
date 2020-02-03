@@ -6,7 +6,11 @@
       :rules="rules"
       class="form-container"
     >
-      <sticky :z-index="10" :class-name="'sub-navbar ' + postForm.status">
+      <sticky
+        :z-index="10"
+        :class-name="'sub-navbar ' + postForm.status"
+        v-if="isEdit"
+      >
         <el-button
           v-loading="loading"
           style="margin-left: 10px;"

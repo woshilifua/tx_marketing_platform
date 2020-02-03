@@ -111,8 +111,8 @@ export const asyncRoutes = [
   {
     path: '/activities',
     component: Layout,
-    redirect: '/example/list',
-    name: 'Activities',
+    redirect: '/activities/list',
+    name: 'Marketing',
     meta: {
       title: '营销活动',
       icon: 'example',
@@ -120,18 +120,18 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'create',
-        component: () => import('@/views/activities/create'),
-        name: 'CreateArticle',
+        path: '/activity/create',
+        component: () => import('@/views/marketing/create'),
+        name: 'CreateActivity',
         meta: {
           title: '创建活动', icon: 'edit',
           roles: ['admin', 'marketing']
         }
       },
       {
-        path: 'edit/:id',
-        component: () => import('@/views/activities/edit'),
-        name: 'EditArticle',
+        path: '/edit/:id',
+        component: () => import('@/views/marketing/edit'),
+        name: 'EditActivity',
         hidden: true,
         meta: {
           title: '编辑活动', noCache: true, activeMenu: '/example/list',
@@ -139,9 +139,9 @@ export const asyncRoutes = [
         },
       },
       {
-        path: 'view/:id',
-        component: () => import('@/views/activities/view'),
-        name: 'ViewActivities',
+        path: '/activity/view/:id',
+        component: () => import('@/views/marketing/view'),
+        name: 'ViewActivity',
         hidden: true,
         meta: {
           title: '参看活动明细', noCache: true, activeMenu: '/example/list',
@@ -149,9 +149,9 @@ export const asyncRoutes = [
         },
       },
       {
-        path: 'view/channel/:id',
-        component: () => import('@/views/activities/view-channel'),
-        name: 'ViewActivitiesChannel',
+        path: '/activity/view/channel/:id',
+        component: () => import('@/views/marketing/view-channel'),
+        name: 'ViewActivityChannel',
         hidden: true,
         meta: {
           title: '参看渠道发展明细', noCache: true, activeMenu: '/example/list',
@@ -159,9 +159,9 @@ export const asyncRoutes = [
         },
       },
       {
-        path: 'list',
-        component: () => import('@/views/activities/list'),
-        name: 'ArticleList',
+        path: '/activity/list',
+        component: () => import('@/views/marketing/list'),
+        name: 'ActivityList',
         meta: {
           title: '活动列表', icon: 'list',
           roles: ['admin', 'marketing']

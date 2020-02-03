@@ -46,9 +46,21 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="80px" align="center" label="已落实">
+        <template slot-scope="scope">
+          <span>{{ scope.row.channelCode }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="80px" align="center" label="待落实">
+        <template slot-scope="scope">
+          <span>{{ scope.row.channelCode }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="活动明细" width="120">
         <template slot-scope="scope">
-          <router-link :to="'/activities/view/' + scope.row.actCode">
+          <router-link :to="'/activity/view/' + scope.row.actCode">
             <el-button type="primary" size="small" icon="el-icon-edit">
               查看
             </el-button>
