@@ -70,10 +70,10 @@
 
 <script>
 import Detail from './components/Detail'
-import { fetchActivitiesDetails } from '@/api/activities'
+import { fetchActivityDetails } from '@/api/activity'
 
 export default {
-  name: 'ViewActivities',
+  name: 'ViewActivity',
   components: { Detail },
   data() {
     return {
@@ -88,7 +88,7 @@ export default {
   methods: {
     fetchData(code) {
       this.listLoading = true
-      fetchActivitiesDetails(code)
+      fetchActivityDetails(code)
         .then(response => {
           this.list = response.data
           console.log(response)

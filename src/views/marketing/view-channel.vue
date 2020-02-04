@@ -64,10 +64,10 @@
 
 <script>
 import ChannelDetail from './components/ChannelDetail'
-import { fetchActivitiesChannels } from '@/api/activities'
+import { fetchActivityChannels } from '@/api/activity'
 
 export default {
-  name: 'ViewActivities',
+  name: 'ViewActivity',
   components: { ChannelDetail },
   data() {
     return {
@@ -82,7 +82,7 @@ export default {
   methods: {
     fetchData(code) {
       this.listLoading = true
-      fetchActivitiesChannels(code)
+      fetchActivityChannels(code)
         .then(response => {
           this.list = response.data
           this.listLoading = false

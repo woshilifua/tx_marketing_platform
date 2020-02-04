@@ -104,7 +104,7 @@
 
 <script>
 import { validURL } from '@/utils/validate'
-import { fetchActivitiesDetails } from '@/api/activities'
+import { fetchActivityDetails } from '@/api/activity'
 
 const defaultForm = {
   status: 'draft',
@@ -198,7 +198,7 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchActivitiesDetails(id)
+      fetchActivityDetails(id)
         .then(response => {
           this.postForm = response.data
 

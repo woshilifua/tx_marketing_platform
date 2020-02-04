@@ -19,9 +19,6 @@
         >
           发布
         </el-button>
-        <el-button v-loading="loading" type="warning" @click="draftForm">
-          草稿
-        </el-button>
       </sticky>
 
       <div class="createPost-main-container">
@@ -31,19 +28,20 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item
-                    label-width="120px"
+                    label-width="140px"
                     label="活动ID:"
                     class="postInfo-container-item"
                   >
-                    <el-input v-model="postForm.ID"> </el-input>
+                    <el-input v-model="postForm.id" disabled> </el-input>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item
-                    label-width="120px"
+                    label-width="140px"
                     label="营销活动目标:"
                     class="postInfo-container-item"
+                    prop="actExpect"
                   >
                     <el-input v-model="postForm.actExpect"> </el-input>
                   </el-form-item>
@@ -52,9 +50,10 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item
-                    label-width="120px"
+                    label-width="140px"
                     label="活动名称:"
                     class="postInfo-container-item"
+                    prop="actName"
                   >
                     <el-input v-model="postForm.actName"> </el-input>
                   </el-form-item>
@@ -62,41 +61,55 @@
 
                 <el-col :span="12">
                   <el-form-item
-                    label-width="120px"
+                    label-width="140px"
                     label="营销成本总额:"
                     class="postInfo-container-item"
+                    prop="actCostCount"
                   >
-                    <el-input v-model="postForm.actCostCount"> </el-input>
+                    <el-input v-model.number="postForm.actCostCount">
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12">
                   <el-form-item
-                    label-width="120px"
+                    label-width="140px"
                     label="活动分类:"
                     class="postInfo-container-item"
+                    prop="actType"
                   >
-                    <el-input v-model="postForm.actType"> </el-input>
+                    <el-select v-model="postForm.actType" placeholder="请选择">
+                      <el-option
+                        v-for="item in actTypes"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item
-                    label-width="120px"
+                    label-width="140px"
                     label="单用户营销成本:"
                     class="postInfo-container-item"
+                    prop="actCostSingle"
                   >
-                    <el-input v-model="postForm.actCostSingle"> </el-input>
+                    <el-input v-model.number="postForm.actCostSingle">
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12">
                   <el-form-item
-                    label-width="120px"
+                    label-width="140px"
                     label="活动范围:"
                     class="postInfo-container-item"
+                    prop="scope"
                   >
                     <el-input v-model="postForm.scope"> </el-input>
                   </el-form-item>
@@ -104,9 +117,10 @@
 
                 <el-col :span="12">
                   <el-form-item
-                    label-width="120px"
+                    label-width="140px"
                     label="营销活动描述:"
                     class="postInfo-container-item"
+                    prop="actDesc"
                   >
                     <el-input v-model="postForm.actDesc"> </el-input>
                   </el-form-item>
@@ -115,13 +129,16 @@
               <el-row>
                 <el-col :span="24">
                   <el-form-item
-                    label-width="120px"
+                    label-width="140px"
                     label="营销活动周期:"
                     class="postInfo-container-item"
+                    prop="timePeriod"
                   >
                     <el-date-picker
-                      v-model="postForm.startTime"
+                      v-model="postForm.timePeriod"
                       type="datetimerange"
+                      value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd"
                       range-separator="至"
                       start-placeholder="开始日期"
                       end-placeholder="结束日期"
@@ -140,21 +157,21 @@
 
 <script>
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { validURL } from '@/utils/validate'
-import { fetchActivitiesDetails } from '@/api/activities'
+import { fetchActivity, createActivity } from '@/api/activity'
 
 const defaultForm = {
   status: 'draft',
-  actName: '',
-  actExpect: '',
-  actCostCount: '',
-  actType: '',
-  actCostSingle: '',
-  startTime: '',
-  endTime: '',
-  actDesc: '',
-  scope: '',
-  id: undefined
+  actName: '江苏省营销活动', // 活动名称
+  actExpect: '200000', // 活动目标
+  actCostCount: 120000, // 营销成本总额
+  actType: '', //活动分类
+  actCostSingle: 12, // 单用户营销成本
+  timePeriod: [],
+  startTime: '', // 开始日期
+  endTime: '', // 结束日期
+  actDesc: '2020年上半年计划', // 营销活动描述
+  scope: '江苏省',
+  id: 'DNF-2020022119123'
 }
 
 export default {
@@ -169,49 +186,37 @@ export default {
     }
   },
   data() {
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        this.$message({
-          message: rule.field + '为必传项',
-          type: 'error'
-        })
-        callback(new Error(rule.field + '为必传项'))
-      } else {
-        callback()
-      }
-    }
-    const validateSourceUri = (rule, value, callback) => {
-      if (value) {
-        if (validURL(value)) {
-          callback()
-        } else {
-          this.$message({
-            message: '外链url填写不正确',
-            type: 'error'
-          })
-          callback(new Error('外链url填写不正确'))
-        }
-      } else {
-        callback()
-      }
-    }
     return {
       postForm: Object.assign({}, defaultForm),
       loading: false,
       userListOptions: [],
       rules: {
-        image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
+        actName: [{ required: true }],
+        actExpect: [{ required: true }],
+        actCostCount: [
+          { required: true },
+          { type: 'number', message: '营销成本总额必须为数字值' }
+        ],
+        actCostSingle: [
+          { required: true },
+          { type: 'number', message: '单用户营销成本必须为数字值' }
+        ],
+        scope: [{ required: true }],
+        actType: [{ required: true }],
+        timePeriod: [{ required: true }],
+        actDesc: [{ required: true }]
       },
-      tempRoute: {}
+      tempRoute: {},
+      actTypes: [
+        { value: '积分型', label: '积分型' },
+        { value: '权益合作型', label: '权益合作型' },
+        { value: '折扣型', label: '折扣型' },
+        { value: '满减型', label: '满减型' },
+        { value: '买送型', label: '买送型' }
+      ]
     }
   },
   computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length
-    },
     displayTime: {
       // set and get is useful when the data
       // returned by the back end api is different from the front end
@@ -227,10 +232,9 @@ export default {
   },
   created() {
     if (this.isEdit) {
-      const code = this.$route.params && this.$route.params.id
-      this.fetchData(code)
+      // const code = this.$route.params && this.$route.params.id
+      // this.fetchData(code)
     }
-
     // Why need to make a copy of this.$route here?
     // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
     // https://github.com/PanJiaChen/vue-element-admin/issues/1221
@@ -238,7 +242,7 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchActivitiesDetails(id)
+      fetchActivity(id)
         .then(response => {
           this.postForm = response.data
 
@@ -254,42 +258,37 @@ export default {
           console.log(err)
         })
     },
+    setTimePeriod(form) {
+      form.startTime = form.timePeriod[0]
+      form.endTime = form.timePeriod[1]
+      delete form.timePeriod
+    },
     submitForm() {
       this.$refs.postForm.validate(valid => {
         if (valid) {
+          let form = { ...this.postForm }
+          this.setTimePeriod(form)
           this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.postForm.status = 'published'
-          this.loading = false
+          createActivity(form)
+            .then(response => {
+              console.log(response)
+              if (response.code === 200) {
+                this.$notify({
+                  title: '成功',
+                  message: '营销活动发布成功, 请等待审核',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
+            .finally(() => {
+              this.loading = false
+            })
         } else {
           console.log('error submit!!')
           return false
         }
       })
-    },
-    draftForm() {
-      if (
-        this.postForm.content.length === 0 ||
-        this.postForm.title.length === 0
-      ) {
-        this.$message({
-          message: '请填写必要的标题和内容',
-          type: 'warning'
-        })
-        return
-      }
-      this.$message({
-        message: '保存成功',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      })
-      this.postForm.status = 'draft'
     }
   }
 }

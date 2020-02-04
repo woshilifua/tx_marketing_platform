@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/activities'
+import { fetchList } from '@/api/activity'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {

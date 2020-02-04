@@ -109,9 +109,9 @@ export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
 
   {
-    path: '/activities',
+    path: '/activity',
     component: Layout,
-    redirect: '/activities/list',
+    redirect: '/activity/list',
     name: 'Marketing',
     meta: {
       title: '营销活动',
@@ -119,6 +119,15 @@ export const asyncRoutes = [
       roles: ['admin', 'marketing']
     },
     children: [
+      {
+        path: '/activity/list',
+        component: () => import('@/views/marketing/list'),
+        name: 'ActivityList',
+        meta: {
+          title: '活动列表', icon: 'list',
+          roles: ['admin', 'marketing']
+        }
+      },
       {
         path: '/activity/create',
         component: () => import('@/views/marketing/create'),
@@ -144,7 +153,7 @@ export const asyncRoutes = [
         name: 'ViewActivity',
         hidden: true,
         meta: {
-          title: '参看活动明细', noCache: true, activeMenu: '/example/list',
+          title: '活动明细', noCache: true, activeMenu: '/example/list',
           roles: ['admin', 'marketing']
         },
       },
@@ -154,18 +163,9 @@ export const asyncRoutes = [
         name: 'ViewActivityChannel',
         hidden: true,
         meta: {
-          title: '参看渠道发展明细', noCache: true, activeMenu: '/example/list',
+          title: '渠道发展明细', noCache: true, activeMenu: '/example/list',
           roles: ['admin', 'marketing']
         },
-      },
-      {
-        path: '/activity/list',
-        component: () => import('@/views/marketing/list'),
-        name: 'ActivityList',
-        meta: {
-          title: '活动列表', icon: 'list',
-          roles: ['admin', 'marketing']
-        }
       }
     ]
   },
