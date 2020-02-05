@@ -3,13 +3,13 @@
     <el-form
       ref="postForm"
       :model="postForm"
-      :rules="rules"
+      :rules="status === 'edit' ? rules : {}"
       class="form-container"
     >
       <sticky
         :z-index="10"
         :class-name="'sub-navbar ' + postForm.status"
-        v-if="isEdit"
+        v-if="status === 'edit'"
       >
         <el-button
           v-loading="loading"
@@ -32,7 +32,11 @@
                     label="活动ID:"
                     class="postInfo-container-item"
                   >
-                    <el-input v-model="postForm.id" disabled> </el-input>
+                    <el-input
+                      v-model="postForm.id"
+                      :disabled="status === 'view'"
+                    >
+                    </el-input>
                   </el-form-item>
                 </el-col>
 
@@ -43,7 +47,11 @@
                     class="postInfo-container-item"
                     prop="actExpect"
                   >
-                    <el-input v-model="postForm.actExpect"> </el-input>
+                    <el-input
+                      v-model="postForm.actExpect"
+                      :disabled="status === 'view'"
+                    >
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -55,7 +63,11 @@
                     class="postInfo-container-item"
                     prop="actName"
                   >
-                    <el-input v-model="postForm.actName"> </el-input>
+                    <el-input
+                      v-model="postForm.actName"
+                      :disabled="status === 'view'"
+                    >
+                    </el-input>
                   </el-form-item>
                 </el-col>
 
@@ -66,7 +78,10 @@
                     class="postInfo-container-item"
                     prop="actCostCount"
                   >
-                    <el-input v-model.number="postForm.actCostCount">
+                    <el-input
+                      v-model.number="postForm.actCostCount"
+                      :disabled="status === 'view'"
+                    >
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -79,7 +94,11 @@
                     class="postInfo-container-item"
                     prop="actType"
                   >
-                    <el-select v-model="postForm.actType" placeholder="请选择">
+                    <el-select
+                      v-model="postForm.actType"
+                      placeholder="请选择"
+                      :disabled="status === 'view'"
+                    >
                       <el-option
                         v-for="item in actTypes"
                         :key="item.value"
@@ -98,7 +117,10 @@
                     class="postInfo-container-item"
                     prop="actCostSingle"
                   >
-                    <el-input v-model.number="postForm.actCostSingle">
+                    <el-input
+                      v-model.number="postForm.actCostSingle"
+                      :disabled="status === 'view'"
+                    >
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -111,7 +133,11 @@
                     class="postInfo-container-item"
                     prop="scope"
                   >
-                    <el-input v-model="postForm.scope"> </el-input>
+                    <el-input
+                      v-model="postForm.scope"
+                      :disabled="status === 'view'"
+                    >
+                    </el-input>
                   </el-form-item>
                 </el-col>
 
@@ -122,7 +148,11 @@
                     class="postInfo-container-item"
                     prop="actDesc"
                   >
-                    <el-input v-model="postForm.actDesc"> </el-input>
+                    <el-input
+                      v-model="postForm.actDesc"
+                      :disabled="status === 'view'"
+                    >
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -142,6 +172,7 @@
                       range-separator="至"
                       start-placeholder="开始日期"
                       end-placeholder="结束日期"
+                      :disabled="status === 'view'"
                     >
                     </el-date-picker>
                   </el-form-item>
@@ -164,9 +195,9 @@ const defaultForm = {
   actName: '江苏省营销活动', // 活动名称
   actExpect: '200000', // 活动目标
   actCostCount: 120000, // 营销成本总额
-  actType: '', //活动分类
+  actType: '积分型', //活动分类
   actCostSingle: 12, // 单用户营销成本
-  timePeriod: [],
+  timePeriod: ['2020-01-22', '2020-02-22'],
   startTime: '', // 开始日期
   endTime: '', // 结束日期
   actDesc: '2020年上半年计划', // 营销活动描述
@@ -180,9 +211,10 @@ export default {
     Sticky
   },
   props: {
-    isEdit: {
-      type: Boolean,
-      default: false
+    status: {
+      type: String,
+      default: 'view',
+      required: true
     }
   },
   data() {
@@ -216,22 +248,9 @@ export default {
       ]
     }
   },
-  computed: {
-    displayTime: {
-      // set and get is useful when the data
-      // returned by the back end api is different from the front end
-      // back end return => "2013-06-25 06:59:25"
-      // front end need timestamp => 1372114765000
-      get() {
-        return +new Date(this.postForm.display_time)
-      },
-      set(val) {
-        this.postForm.display_time = new Date(val)
-      }
-    }
-  },
   created() {
-    if (this.isEdit) {
+    if (this.status === 'view') {
+      // TODO 缺少获取活动信息的接口
       // const code = this.$route.params && this.$route.params.id
       // this.fetchData(code)
     }
@@ -245,14 +264,6 @@ export default {
       fetchActivity(id)
         .then(response => {
           this.postForm = response.data
-
-          // just for test
-          this.postForm.title += `   Article Id:${this.postForm.id}`
-          this.postForm.content_short += `Article Id:${this.postForm.id}`
-
-          // set tagsview title
-
-          // set page title
         })
         .catch(err => {
           console.log(err)

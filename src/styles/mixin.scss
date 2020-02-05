@@ -1,6 +1,6 @@
 @mixin clearfix {
   &:after {
-    content: "";
+    content: '';
     display: table;
     clear: both;
   }
@@ -44,23 +44,25 @@
     border-bottom: $color-border-style;
     border-left: $transparent-border-style;
     border-right: $transparent-border-style;
-  }
-
-  @else if $direction==right {
+  } @else if $direction==right {
     border-left: $color-border-style;
     border-top: $transparent-border-style;
     border-bottom: $transparent-border-style;
-  }
-
-  @else if $direction==down {
+  } @else if $direction==down {
     border-top: $color-border-style;
     border-left: $transparent-border-style;
     border-right: $transparent-border-style;
-  }
-
-  @else if $direction==left {
+  } @else if $direction==left {
     border-right: $color-border-style;
     border-top: $transparent-border-style;
     border-bottom: $transparent-border-style;
   }
+}
+.createPost-container .el-input.is-disabled .el-input__inner {
+  background-color: white;
+  color: #606266;
+}
+.createPost-container .el-range-editor.is-disabled {
+  background-color: white;
+  color: #606266;
 }

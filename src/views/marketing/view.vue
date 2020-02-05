@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Detail :is-edit="false" />
+    <Detail :status="'view'" />
     <div class="list">
       <el-table
         v-loading="listLoading"
@@ -83,15 +83,14 @@ export default {
   },
   created() {
     const code = this.$route.params && this.$route.params.code
-    this.fetchData(code)
+    this.fetchActivityDetails(code)
   },
   methods: {
-    fetchData(code) {
+    fetchActivityDetails(code) {
       this.listLoading = true
       fetchActivityDetails(code)
         .then(response => {
           this.list = response.data
-          console.log(response)
           this.listLoading = false
         })
         .catch(err => {
