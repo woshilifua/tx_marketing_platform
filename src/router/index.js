@@ -80,7 +80,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -138,12 +138,12 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '/edit/:id',
-        component: () => import('@/views/marketing/edit'),
-        name: 'EditActivity',
+        path: '/activity/review/:id',
+        component: () => import('@/views/marketing/review'),
+        name: 'ReviewActivity',
         hidden: true,
         meta: {
-          title: '编辑活动', noCache: true, activeMenu: '/example/list',
+          title: '审核活动', noCache: true, activeMenu: '/example/list',
           roles: ['admin', 'marketing']
         },
       },
