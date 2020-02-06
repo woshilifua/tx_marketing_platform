@@ -37,9 +37,9 @@ export function createActivity(data) {
   })
 }
 
-export function updateArticle(data) {
+export function updateActivity(data) {
   return request({
-    url: '/article/update',
+    url: 'http://39.96.167.179:10011/mastermind/a/update/act',
     method: 'post',
     data
   })

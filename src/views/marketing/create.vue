@@ -1,5 +1,5 @@
 <template>
-  <Detail :status="'edit'" />
+  <Detail :status="'create'" />
 </template>
 
 <script>

@@ -28,19 +28,19 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="活动成本">
+      <el-table-column width="100px" align="center" label="活动成本">
         <template slot-scope="scope">
           <span>{{ scope.row.actCostCount }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="活动状态">
+      <el-table-column width="80px" align="center" label="活动状态">
         <template slot-scope="scope">
           <span>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="渠道数量">
+      <el-table-column width="80px" align="center" label="渠道数量">
         <template slot-scope="scope">
           <span>{{ scope.row.channelCode }}</span>
         </template>
@@ -58,11 +58,18 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="活动明细" width="120">
+      <el-table-column align="center" label="查看活动" width="120">
         <template slot-scope="scope">
           <router-link :to="'/activity/view/' + scope.row.actCode">
+            <span class="blue">查看</span>
+          </router-link>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="审核活动" width="120">
+        <template slot-scope="scope">
+          <router-link :to="'/activity/review/' + scope.row.actCode">
             <el-button type="primary" size="small" icon="el-icon-edit">
-              查看
+              审核
             </el-button>
           </router-link>
         </template>

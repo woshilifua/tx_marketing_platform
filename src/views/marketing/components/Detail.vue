@@ -3,13 +3,13 @@
     <el-form
       ref="postForm"
       :model="postForm"
-      :rules="status === 'edit' ? rules : {}"
+      :rules="status === 'create' ? rules : {}"
       class="form-container"
     >
       <sticky
         :z-index="10"
         :class-name="'sub-navbar ' + postForm.status"
-        v-if="status === 'edit'"
+        v-if="status === 'create'"
       >
         <el-button
           v-loading="loading"
@@ -21,6 +21,42 @@
         </el-button>
       </sticky>
 
+      <sticky
+        :z-index="10"
+        :class-name="'sub-navbar ' + postForm.status"
+        v-if="status === 'review'"
+      >
+        <el-button
+          v-loading="loading"
+          style="margin-left: 10px;"
+          type="warning"
+          @click="updateForm('fail')"
+        >
+          驳回
+        </el-button>
+        <el-button
+          v-loading="loading"
+          style="margin-left: 10px;"
+          type="success"
+          @click="updateForm('success')"
+        >
+          通过审核
+        </el-button>
+      </sticky>
+      <div class="createPost-main-container" style="padding-bottom:0" v-if="status === 'review'">
+        <el-row>
+          <span class="label">审核意见:</span>
+          <el-col :span="12">
+            <el-input
+              type="textarea"
+              :rows="4"
+              placeholder="请输入内容"
+              v-model="opinion"
+            >
+            </el-input>
+          </el-col>
+        </el-row>
+      </div>
       <div class="createPost-main-container">
         <el-row>
           <el-col :span="24">
@@ -32,10 +68,7 @@
                     label="活动ID:"
                     class="postInfo-container-item"
                   >
-                    <el-input
-                      v-model="postForm.id"
-                      :disabled="status === 'view'"
-                    >
+                    <el-input v-model="postForm.id" :disabled="isDisabled">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -49,7 +82,7 @@
                   >
                     <el-input
                       v-model="postForm.actExpect"
-                      :disabled="status === 'view'"
+                      :disabled="isDisabled"
                     >
                     </el-input>
                   </el-form-item>
@@ -63,10 +96,7 @@
                     class="postInfo-container-item"
                     prop="actName"
                   >
-                    <el-input
-                      v-model="postForm.actName"
-                      :disabled="status === 'view'"
-                    >
+                    <el-input v-model="postForm.actName" :disabled="isDisabled">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -80,7 +110,7 @@
                   >
                     <el-input
                       v-model.number="postForm.actCostCount"
-                      :disabled="status === 'view'"
+                      :disabled="isDisabled"
                     >
                     </el-input>
                   </el-form-item>
@@ -97,7 +127,7 @@
                     <el-select
                       v-model="postForm.actType"
                       placeholder="请选择"
-                      :disabled="status === 'view'"
+                      :disabled="isDisabled"
                     >
                       <el-option
                         v-for="item in actTypes"
@@ -119,7 +149,7 @@
                   >
                     <el-input
                       v-model.number="postForm.actCostSingle"
-                      :disabled="status === 'view'"
+                      :disabled="isDisabled"
                     >
                     </el-input>
                   </el-form-item>
@@ -133,10 +163,7 @@
                     class="postInfo-container-item"
                     prop="scope"
                   >
-                    <el-input
-                      v-model="postForm.scope"
-                      :disabled="status === 'view'"
-                    >
+                    <el-input v-model="postForm.scope" :disabled="isDisabled">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -148,10 +175,7 @@
                     class="postInfo-container-item"
                     prop="actDesc"
                   >
-                    <el-input
-                      v-model="postForm.actDesc"
-                      :disabled="status === 'view'"
-                    >
+                    <el-input v-model="postForm.actDesc" :disabled="isDisabled">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -172,7 +196,7 @@
                       range-separator="至"
                       start-placeholder="开始日期"
                       end-placeholder="结束日期"
-                      :disabled="status === 'view'"
+                      :disabled="isDisabled"
                     >
                     </el-date-picker>
                   </el-form-item>
@@ -188,7 +212,8 @@
 
 <script>
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchActivity, createActivity } from '@/api/activity'
+import { createForm } from '@/utils/form'
+import { fetchActivity, createActivity, updateActivity } from '@/api/activity'
 
 const defaultForm = {
   status: 'draft',
@@ -220,6 +245,7 @@ export default {
   data() {
     return {
       postForm: Object.assign({}, defaultForm),
+      opinion: '',
       loading: false,
       userListOptions: [],
       rules: {
@@ -249,7 +275,7 @@ export default {
     }
   },
   created() {
-    if (this.status === 'view') {
+    if (this.isDisabled) {
       // TODO 缺少获取活动信息的接口
       // const code = this.$route.params && this.$route.params.id
       // this.fetchData(code)
@@ -258,6 +284,11 @@ export default {
     // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
     // https://github.com/PanJiaChen/vue-element-admin/issues/1221
     this.tempRoute = Object.assign({}, this.$route)
+  },
+  computed: {
+    isDisabled() {
+      return this.status === 'view' || this.status === 'review'
+    }
   },
   methods: {
     fetchData(id) {
@@ -300,6 +331,20 @@ export default {
           return false
         }
       })
+    },
+    updateForm(status) {
+      let reqForm = {
+        status: status,
+        actCode: '2RWoNa6m'
+      }
+      reqForm = createForm(reqForm)
+      updateActivity(reqForm)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }
@@ -341,5 +386,13 @@ export default {
     border-radius: 0px;
     border-bottom: 1px solid #bfcbd9;
   }
+}
+.label {
+  font-weight: 700;
+  color: #606266;
+  float: left;
+  width: 140px;
+  text-align: right;
+  padding-right: 12px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <Detail :is-edit="true" />
+  <Detail :status="'review'" />
 </template>
 
 <script>
