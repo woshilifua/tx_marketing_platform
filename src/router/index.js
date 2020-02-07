@@ -5,7 +5,8 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-
+import Marketing from './modules/marketing'
+import Role from './modules/role'
 /* Router Modules */
 
 /**
@@ -105,70 +106,10 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-
+  Marketing,
+  Role,
   /** when your routing map is too long, you can split it into small modules **/
 
-  {
-    path: '/activity',
-    component: Layout,
-    redirect: '/activity/list',
-    name: 'Marketing',
-    meta: {
-      title: '营销活动',
-      icon: 'example',
-      roles: ['admin', 'marketing']
-    },
-    children: [
-      {
-        path: '/activity/list',
-        component: () => import('@/views/marketing/list'),
-        name: 'ActivityList',
-        meta: {
-          title: '活动列表', icon: 'list',
-          roles: ['admin', 'marketing']
-        }
-      },
-      {
-        path: '/activity/create',
-        component: () => import('@/views/marketing/create'),
-        name: 'CreateActivity',
-        meta: {
-          title: '创建活动', icon: 'edit',
-          roles: ['admin', 'marketing']
-        }
-      },
-      {
-        path: '/activity/review/:id',
-        component: () => import('@/views/marketing/review'),
-        name: 'ReviewActivity',
-        hidden: true,
-        meta: {
-          title: '审核活动', noCache: true, activeMenu: '/example/list',
-          roles: ['admin', 'marketing']
-        },
-      },
-      {
-        path: '/activity/view/:id',
-        component: () => import('@/views/marketing/view'),
-        name: 'ViewActivity',
-        hidden: true,
-        meta: {
-          title: '活动明细', noCache: true, activeMenu: '/example/list',
-          roles: ['admin', 'marketing']
-        },
-      },
-      {
-        path: '/activity/view/channel/:id',
-        component: () => import('@/views/marketing/view-channel'),
-        name: 'ViewActivityChannel',
-        hidden: true,
-        meta: {
-          title: '渠道发展明细', noCache: true, activeMenu: '/example/list',
-          roles: ['admin', 'marketing']
-        },
-      }
-    ]
-  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
